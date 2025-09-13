@@ -213,6 +213,11 @@ func getStandardUser(user *User) *UserStandard {
 }
 
 func getUserWithoutThirdIdp(user *User) *UserWithoutThirdIdp {
+	roleNames := []string{}
+	for _, role := range user.Roles {
+		roleNames = append(roleNames, role.Name)
+	}
+
 	res := &UserWithoutThirdIdp{
 		Owner:       user.Owner,
 		Name:        user.Name,
@@ -290,7 +295,7 @@ func getUserWithoutThirdIdp(user *User) *UserWithoutThirdIdp {
 		Properties: user.Properties,
 
 		Roles:       user.Roles,
-		RoleNames:   user.RoleNames,
+		RoleNames:   roleNames,
 		Permissions: user.Permissions,
 		Groups:      user.Groups,
 
@@ -401,12 +406,6 @@ func refineUser(user *User) *User {
 	}
 	if user.Roles == nil {
 		user.Roles = []*Role{}
-	} else {
-		roleNames := []string{}
-		for _, role := range user.Roles {
-			roleNames = append(roleNames, role.Name)
-		}
-		user.RoleNames = roleNames
 	}
 	if user.Permissions == nil {
 		user.Permissions = []*Permission{}
